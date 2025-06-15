@@ -34,7 +34,7 @@ git clone https://github.com/puter-apps/knowledge-base-creator.git
 
 and open the `index.html` file in any hosted environment.
 
-Alternatively, access the hosted version at [puter.com/app/knowledge-base-creator](https://puter.com/app/ai-sitegit-analyzer).
+Alternatively, access the hosted version at [https://puter.com/app/ai-sitegit-analyzer](https://puter.com/app/ai-sitegit-analyzer).
 
 <br>
 
