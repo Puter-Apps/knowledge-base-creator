@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://puter.com/app/knowledge-base-creator" target="_blank">Knowledge Base Creator</a>
+  <a href="https://puter.com/app/ai-sitegit-analyzer" target="_blank">Knowledge Base Creator</a>
 </h1>
 
 <p align="center">A web application for creating, organizing, and sharing knowledge bases with AI-powered content generation and search capabilities.
@@ -34,7 +34,7 @@ git clone https://github.com/puter-apps/knowledge-base-creator.git
 
 and open the `index.html` file in any hosted environment.
 
-Alternatively, access the hosted version at [puter.com/app/knowledge-base-creator](https://puter.com/app/knowledge-base-creator).
+Alternatively, access the hosted version at [puter.com/app/knowledge-base-creator](https://puter.com/app/ai-sitegit-analyzer).
 
 <br>
 
