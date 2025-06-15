@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puter AI Website Knowledge Bot</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://btn.puter.site/7.js" data-repo="https://github.com/Puter-Apps/knowledge-base-creator" data-position="50"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"></head>
+<body>
+    <div class="app-container">
+        <!-- GitHub Button -->
+        <a href="https://github.com/repo" target="_blank" class="github-btn">
+            <svg class="github-icon" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+            </svg>
+            GitHub
+        </a>
+
+        <!-- Left Panel - Data Management -->
+        <div class="left-panel">
+            <div class="panel-header">
+                <h1><i class="fas fa-robot" style="color: #6c5ce7;"></i> AI Knowledge Bot</h1>
+                <p>Scan websites &amp; GitHub repos to build your knowledge base</p>
+            </div>
+
+            <!-- Scan New Site Section -->
+            <div class="scan-section">
+                <h2><i class="fas fa-search" style="color: #0984e3;"></i> Scan New Source</h2>
+                
+                <div class="form-group">
+                    <label for="websiteUrl">Website URL or GitHub Repository</label>
+                    <input type="url" id="websiteUrl" placeholder="example.com or github.com/user/repo" required="">
+                    <div class="url-type-indicator" id="urlTypeIndicator">
+                        <span id="urlTypeText"><i class="fas fa-globe" style="color: #00b894;"></i> Website detected</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="maxPages">Max Pages/Files to Scan</label>
+                    <select id="maxPages">
+                        <option value="5">5 items</option>
+                        <option value="10" selected="">10 items</option>
+                        <option value="15">15 items</option>
+                        <option value="20">20 items</option>
+                        <option value="30">30 items</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="analyzeBtn">
+                    <span class="btn-text"><i class="fas fa-search" style="color: #0984e3;"></i> Analyze &amp; Preview</span>
+                    <span class="spinner" style="display: none;"></span>
+                </button>
+            </div>
+
+            <!-- Saved Sites Section -->
+            <div class="saved-sites-section">
+                <div class="saved-sites-header">
+                    <h2><i class="fas fa-book" style="color: #e17055;"></i> Knowledge Base</h2>
+                </div>
+                <ul class="saved-sites-list" id="savedSitesList">
+                    <li class="empty-state">
+                        <h3>No sources saved yet</h3>
+                        <p>Scan your first website or GitHub repo to get started!</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Panel - Chat -->
+        <div class="right-panel">
+            <div class="chat-header">
+                <h2><i class="fas fa-comments" style="color: #00cec9;"></i> AI Assistant</h2>
+                <div class="current-site" id="currentSiteDisplay" style="display: none;">
+                    Currently loaded: <strong id="currentSiteTitle">None</strong>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message status">
+                        <i class="fas fa-hand" style="color: #fdcb6e;"></i> Welcome! Please scan a website or GitHub repository to start chatting.
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="chatInput" placeholder="Ask a question about the selected source..." disabled="" rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn" disabled="">
+                        <span class="btn-text">Send</span>
+                        <span class="spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Preview Modal -->
+    <div class="modal" id="linkPreviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Select Pages to Scan</h2>
+                <p id="modalDescription">Choose which pages you want to include in the scan. AI-suggested pages are pre-selected.</p>
+            </div>
+            
+            <!-- GitHub Repository Info -->
+            <div class="github-repo-info" id="githubRepoInfo" style="display: none;">
+                <h3><i class="fas fa-folder" style="color: #feca57;"></i> Repository Information</h3>
+                <p><strong>Repository:</strong> <span id="repoName"></span></p>
+                <p><strong>Description:</strong> <span id="repoDescription"></span></p>
+                <p><strong>Language:</strong> <span id="repoLanguage"></span></p>
+                <p><strong>Total Files:</strong> <span id="repoFileCount"></span></p>
+            </div>
+            
+            <div id="linkPreviewContent">
+                <!-- Website URL Selection -->
+                <div class="url-selection-container" id="websiteUrlSelection">
+                    <div class="url-selection-header">
+                        <h3>Initial URL (Always Included)</h3>
+                    </div>
+                    <div class="url-list">
+                        <div class="url-item">
+                            <input type="checkbox" checked="" disabled="">
+                            <div class="url-item-content">
+                                <div class="url-item-url" id="initialUrlDisplay"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="url-selection-container" id="additionalUrlSelection">
+                    <div class="url-selection-header">
+                        <h3>Additional Pages</h3>
+                        <div class="selection-controls">
+                            <button class="control-btn" onclick="selectAllUrls()">Select All</button>
+                            <button class="control-btn" onclick="selectNoneUrls()">Select None</button>
+                            <button class="control-btn" onclick="selectAISuggested()">AI Suggested Only</button>
+                        </div>
+                    </div>
+                    <div class="url-list" id="additionalUrlsList">
+                        <!-- URLs will be populated here -->
+                    </div>
+                </div>
+
+                <!-- GitHub File Selection -->
+                <div class="file-selection-container" id="githubFileSelection" style="display: none;">
+                    <div class="file-selection-header">
+                        <h3>📄 Repository Files</h3>
+                        <div class="selection-controls">
+                            <button class="control-btn" onclick="selectAllFiles()">Select All</button>
+                            <button class="control-btn" onclick="selectNoneFiles()">Select None</button>
+                            <button class="control-btn" onclick="selectAISuggestedFiles()">AI Suggested Only</button>
+                        </div>
+                    </div>
+                    <div class="file-list" id="githubFilesList">
+                        <!-- Files will be populated here -->
+                    </div>
+                </div>
+                
+</div>
+
+<div class="selection-summary" id="selectionSummary">
+    <!-- Summary will be updated here -->
+</div>
+
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelScanBtn">Cancel</button>
+                <button class="btn" id="confirmScanBtn">
+                    <span class="btn-text">Start Scanning</span>
+                    <span class="spinner" style="display: none;"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+
+
+<script src="app.js"></script></body></html>
